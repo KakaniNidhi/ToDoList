@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View  } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Appbar,TextInput, Button, Card, List } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import { Item } from 'react-native-paper/lib/typescript/components/List/List';
@@ -24,29 +24,28 @@ export default class App extends React.Component {
   }
   async componentDidMount(){
     this.setState({
-      item:JSON.parse(await AsyncStorage.getItem("mylist"))
+      item:JSON.parse(await AsyncStorage.getItem("mylist")) || ""
     })
-    this.arr=JSON.parse(await AsyncStorage.getItem("mylist"))
-    this.id=this.arr[this.arr.length-1].id+1
-    
+    this.arr=JSON.parse(await AsyncStorage.getItem("mylist")) || []
+    this.id=this.arr[this.arr.length-1].id+1//comment it and 
     }
   render(){
     var renderList;
-    //if(this.state.item.length > 0){
-      //renderList = this.state.item.map(item=>{
+    if(this.state.item.length > 0){
+      renderList = this.state.item.map(item=>{
         return (
           <Card key={item.id} style={{margin:10}}>
           <List.Item 
               title={item.data}
               right={() => <List.Icon icon="delete" />}
-              //onPress={()=>{AsyncStorage.removeItem("mylist")}}
+              onPress={()=>{AsyncStorage.removeItem("mylist")}}
           />
         </Card>)
-      //})
-    // }
-    // else{
-    //   renderList=<Text>no items</Text>
-    // }
+      })
+    }
+    else{
+      renderList=<Text>no items</Text>
+      }
     return (
       <View style={styles.container}>
       <Appbar.Header>
@@ -74,6 +73,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#d3d3d3',
-    //backgroundColor: '#fff',
   },
 });
